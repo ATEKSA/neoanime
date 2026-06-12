@@ -60,7 +60,7 @@ const Catalog = () => {
     <div className="catalog-container" style={{ padding: '2rem 5%' }}>
       <div className="catalog-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: '#fff', margin: 0 }}>
-          {searchQuery ? `?�?�?�???�???�?�?�?� ???????????�: "${searchQuery}"` : genreQuery ? `?????????� ???? ?�?�???�??` : '?�???�?�?????�?�???� ?????????�'}
+          {searchQuery ? `Результаты поиска: "${searchQuery}"` : genreQuery ? `Аниме по жанру` : 'Популярные аниме'}
         </h1>
         
         <form onSubmit={handleSearch} style={{ display: 'flex', gap: '0.5rem' }}>
@@ -70,22 +70,24 @@ const Catalog = () => {
               name="q"
               type="text" 
               className="search-input" 
-              placeholder="Введите значение..." 
+              placeholder="Поиск аниме..."
               defaultValue={searchQuery}
               style={{ width: '100%' }}
             />
           </div>
-          <button type="submit" style={{ background: 'var(--accent-gradient)', color: '#fff', border: 'none', padding: '0 1.5rem', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Текст</button>
+          <button type="submit" style={{ background: 'var(--accent-gradient)', color: '#fff', border: 'none', padding: '0 1.5rem', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>
+            Искать
+          </button>
         </form>
       </div>
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--accent-color)', fontSize: '1.5rem', fontWeight: 'bold' }}>
-          ?????????? ?? ?�?�?�?� AniLibria...
+          Загрузка из базы AniLibria...
         </div>
       ) : animes.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-secondary)', fontSize: '1.2rem' }}>
-          ?????�?�???? ???� ???�?????�????. ???????�???�?????�?� ???�???�?????�?? ?�?�???�????.
+          Ничего не найдено. Попробуйте изменить фильтры.
         </div>
       ) : (
         <>
@@ -119,15 +121,19 @@ const Catalog = () => {
                 disabled={page === 1} 
                 onClick={() => setPage(p => p - 1)}
                 style={{ padding: '0.8rem 1.5rem', borderRadius: '8px', background: 'var(--bg-surface)', color: '#fff', border: '1px solid var(--border-color)', cursor: page === 1 ? 'not-allowed' : 'pointer', opacity: page === 1 ? 0.5 : 1 }}
-              >Текст</button>
+              >
+                Назад
+              </button>
               <span style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
-                ???�?�?�?????�?� {page} ???� {totalPages}
+                Страница {page} из {totalPages}
               </span>
               <button 
                 disabled={page === totalPages} 
                 onClick={() => setPage(p => p + 1)}
                 style={{ padding: '0.8rem 1.5rem', borderRadius: '8px', background: 'var(--bg-surface)', color: '#fff', border: '1px solid var(--border-color)', cursor: page === totalPages ? 'not-allowed' : 'pointer', opacity: page === totalPages ? 0.5 : 1 }}
-              >Текст</button>
+              >
+                Вперед
+              </button>
             </div>
           )}
         </>

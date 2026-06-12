@@ -22,7 +22,7 @@ const CollectionView = () => {
     // Fetch profile to get collection
     fetch(`/api/profile/${username}`)
       .then(r => {
-        if (!r.ok) throw new Error('?????�???�?????�?�?�?�?? ???� ???�?????�??');
+        if (!r.ok) throw new Error('Не удалось загрузить данные');
         return r.json();
       })
       .then(data => {
@@ -30,7 +30,7 @@ const CollectionView = () => {
         if (found) {
           setCollection(found);
         } else {
-          setError('Ошибка');
+          setError('Ошибка загрузки коллекции');
         }
       })
       .catch(e => setError(e.message))
@@ -62,7 +62,7 @@ const CollectionView = () => {
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
       }
     } catch (e) {
-      showToast('Успешно');
+      showToast('Ошибка при обновлении');
     }
   };
 
@@ -87,7 +87,7 @@ const CollectionView = () => {
   const handleAddAnime = (anime) => {
     // Check if already in collection
     if (collection.items.some(i => i.id === anime.id.toString())) {
-      return showToast('Успешно');
+      return showToast('Это аниме уже в коллекции!');
     }
 
     const newItem = { 
@@ -101,7 +101,7 @@ const CollectionView = () => {
     
     setSearchQuery('');
     setSearchResults([]);
-    showToast(`Успешно: ${newItem.name}`);
+    showToast(`Добавлено: ${newItem.name}`);
   };
 
   const handleRemoveAnime = (e, animeId) => {
@@ -112,11 +112,11 @@ const CollectionView = () => {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    showToast('Успешно');
+    showToast('Удалено из коллекции!');
   };
 
   const handleDeleteCollection = async () => {
-    if (!window.confirm('?�?� ?????�?�?�???�, ?�?�?? ?�???�???�?� ?????�?�???�?? ???�?? ???????�???�???? ???�?????�?????�?')) return;
+    if (!window.confirm('Вы уверены, что хотите удалить этот элемент из коллекции?')) return;
     
     const updatedCollections = currentUser.profile.collections.filter(c => c.id !== collectionId);
     
@@ -131,18 +131,18 @@ const CollectionView = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Успешно');
+        showToast('Коллекция удалена');
         const updatedUser = { ...currentUser, profile: { ...currentUser.profile, collections: updatedCollections } };
         setCurrentUser(updatedUser);
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
         navigate('/collections');
       }
     } catch (e) {
-      showToast('Успешно');
+      showToast('Ошибка при удалении');
     }
   };
 
-  if (loading) return <div style={{textAlign: 'center', padding: '5rem'}}>?�?�???�???�???� ???????�???�????...</div>;
+  if (loading) return <div style={{textAlign: 'center', padding: '5rem'}}>Загрузка коллекции...</div>;
   if (error) return <div style={{textAlign: 'center', padding: '5rem', color: 'red'}}><ShieldAlert size={48} /><h2>{error}</h2></div>;
 
   return (
@@ -150,24 +150,26 @@ const CollectionView = () => {
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
         <div>
           <h1 style={{color: 'white', marginBottom: '5px'}}>{collection.name}</h1>
-          <div style={{color: 'var(--text-secondary)'}}>?????�???�: <Link to={`/profile/${username}`} style={{color: 'var(--accent-color)', textDecoration: 'none'}}>{username}</Link></div>
+          <div style={{color: 'var(--text-secondary)'}}>Создатель: <Link to={`/profile/${username}`} style={{color: 'var(--accent-color)', textDecoration: 'none'}}>{username}</Link></div>
         </div>
         <div style={{display: 'flex', gap: '10px'}}>
           <button className="btn-action" onClick={handleShare} style={{padding: '10px 20px', background: 'rgba(0,240,255,0.1)', color: 'var(--accent-color)'}}>
-            <Share2 size={18} /></button>
+            <Share2 size={18} /> Поделиться
+          </button>
           {isOwner && (
             <button className="btn-action" onClick={handleDeleteCollection} style={{padding: '10px 20px', background: 'rgba(255,0,0,0.1)', color: 'red'}}>
-              <Trash2 size={18} /></button>
+              <Trash2 size={18} /> Удалить
+            </button>
           )}
         </div>
       </div>
 
       {isOwner && (
         <div style={{background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '2rem', border: '1px solid var(--border-color)', position: 'relative'}}>
-          <h3 style={{color: 'white', marginBottom: '10px'}}></h3>
+          <h3 style={{color: 'white', marginBottom: '10px'}}>Добавить аниме</h3>
           <input 
             type="text" 
-            placeholder="Введите значение..." 
+            placeholder="Название аниме на английском..."
             value={searchQuery} 
             onChange={handleSearchAnime} 
             style={{width: '100%', padding: '12px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
@@ -196,7 +198,7 @@ const CollectionView = () => {
 
       {collection.items.length === 0 ? (
         <div style={{textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}>
-          ?� ???�???? ???????�???�???� ???????� ???�?� ?�???????�.
+          В этой коллекции пока нет аниме.
         </div>
       ) : (
         <div className="favorites-grid">

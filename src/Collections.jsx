@@ -1,61 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
-import { Plus, FolderHeart, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { useOutletContext, Link, useNavigate } from 'react-router-dom';
+import { FolderHeart, Plus, Lock } from 'lucide-react';
+import './Profile.css'; // Reuse profile CSS
 
-
-const BAD_WORDS = ['хуй', 'пизд', 'ебан', 'блять', 'сука', 'fuck', 'shit', 'bitch', 'шлюха', 'уебок', 'хер'];
-const isProfane = (str) => {
-  const s = str.toLowerCase();
-  return BAD_WORDS.some(w => s.includes(w));
-};
+const BAD_WORDS = ['хуй', 'пизд', 'ебл', 'бля', 'сука', 'fuck', 'shit', 'bitch', 'шлюх', 'гандон', 'чмо'];
 
 const Collections = () => {
   const { currentUser, setCurrentUser, showToast } = useOutletContext();
   const [showCreate, setShowCreate] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
+  const navigate = useNavigate();
+
+  const isProfane = (text) => {
+    const lower = text.toLowerCase();
+    return BAD_WORDS.some(word => lower.includes(word));
+  };
 
   const handleCreate = async () => {
-    if (!currentUser) return showToast('Авторизуйтесь в профиле');
-    if (newCollectionName.length < 3) return showToast('Название слишком короткое (мин 3 символа)');
-    if (isProfane(newCollectionName)) return showToast('Название содержит нецензурные слова!');
-    
+    if (!currentUser) return showToast('Авторизуйтесь, чтобы продолжить');
+    if (newCollectionName.length < 3) return showToast('Название должно содержать минимум 3 символа');
+    if (isProfane(newCollectionName)) return showToast('Название содержит недопустимые слова!');
+
+    const collectionId = Date.now().toString();
     const newCollection = {
-      id: Date.now().toString(),
+      id: collectionId,
       name: newCollectionName,
-      items: [],
-      createdAt: new Date().toISOString()
+      items: []
     };
 
     const updatedCollections = [...(currentUser.profile?.collections || []), newCollection];
-
+    
     try {
       const res = await fetch(`/api/profile/update`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          username: currentUser.username,
-          profile: { ...currentUser.profile, collections: updatedCollections }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          username: currentUser.username, 
+          profileData: { collections: updatedCollections } 
         })
       });
-      if(res.ok) {
+      const data = await res.json();
+      if (data.success) {
         showToast('Коллекция создана!');
-        const updatedUser = { ...currentUser, profile: { ...currentUser.profile, collections: updatedCollections }};
+        const updatedUser = { ...currentUser, profile: { ...currentUser.profile, collections: updatedCollections } };
         setCurrentUser(updatedUser);
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
         setNewCollectionName('');
         setShowCreate(false);
-      } else {
-        showToast('Ошибка при создании');
+        navigate(`/collection/${currentUser.username}/${collectionId}`);
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      showToast('Ошибка при обновлении');
     }
   };
 
   if (!currentUser) {
     return (
-      <div className="collections-container" style={{textAlign: 'center', paddingTop: '100px'}}>
-        <h2>Авторизуйтесь в профиле, чтобы создавать коллекции</h2>
+      <div style={{textAlign: 'center', padding: '5rem', color: 'var(--text-secondary)'}}>
+        <Lock size={48} style={{marginBottom: '1rem', opacity: 0.5}} />
+        <h2>Авторизуйтесь, чтобы создавать коллекции</h2>
       </div>
     );
   }
@@ -63,54 +66,50 @@ const Collections = () => {
   const collections = currentUser.profile?.collections || [];
 
   return (
-    <div className="collections-container">
-      <div className="collections-header">
-        <h1 style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+    <div style={{padding: '2rem'}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
+        <h1 style={{color: 'white', display: 'flex', alignItems: 'center', gap: '10px'}}>
           <FolderHeart color="var(--accent-color)" /> Мои коллекции
         </h1>
-        <button className="btn-create" onClick={() => setShowCreate(!showCreate)}>
+        <button className="btn-save" onClick={() => setShowCreate(!showCreate)}>
           {showCreate ? 'Отмена' : <><Plus size={18} /> Создать коллекцию</>}
         </button>
       </div>
 
       {showCreate && (
-        <div className="create-collection-card">
-          <h3 style={{color: 'white', marginBottom: '15px'}}>Новая коллекция</h3>
-          <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+        <div style={{background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '20px', border: '1px solid var(--border-color)'}}>
+          <h3 style={{color: 'white', marginBottom: '15px'}}>Создание коллекции</h3>
+          <div style={{display: 'flex', gap: '10px'}}>
             <input 
               type="text" 
-              placeholder="Название (например: Любимые аниме)" 
+              placeholder="Название (например: Любимые аниме)"
               value={newCollectionName}
               onChange={e => setNewCollectionName(e.target.value)}
-              className="collection-input"
+              style={{flex: 1, padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
             />
-            <button className="btn-save" onClick={handleCreate}>Сохранить</button>
+            <button className="btn-save" onClick={handleCreate}>Создать</button>
           </div>
           <p style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '10px'}}>
-            * К названиям применяется фильтр мата.
+            * В коллекцию можно добавлять любые аниме.
           </p>
         </div>
       )}
 
-      <div className="collections-grid">
       {collections.length === 0 ? (
-        <div style={{color: 'var(--text-secondary)', padding: '2rem 0', gridColumn: '1 / -1'}}>
-          У вас еще нет коллекций. Создайте первую!
+        <div style={{textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}>
+          У вас пока нет коллекций. Создайте первую!
         </div>
       ) : (
-        collections.map(col => (
-          <Link to={`/collection/${col.id}`} key={col.id} className="collection-card">
-            <div className="collection-icon">
-              <FolderHeart size={40} color="var(--accent-color)" />
-            </div>
-            <div className="collection-info">
-              <h3>{col.name}</h3>
+        <div className="favorites-grid" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))'}}>
+          {collections.map(col => (
+            <Link to={`/collection/${currentUser.username}/${col.id}`} key={col.id} className="favorite-item" style={{padding: '20px', aspectRatio: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center', minHeight: '150px'}}>
+              <FolderHeart size={48} color="var(--accent-color)" />
+              <div style={{color: 'white', fontWeight: 'bold', fontSize: '1.2rem', textAlign: 'center'}}>{col.name}</div>
               <div style={{color: 'var(--text-secondary)', fontSize: '0.9rem'}}>{col.items?.length || 0} тайтлов</div>
-            </div>
-          </Link>
-        ))
+            </Link>
+          ))}
+        </div>
       )}
-      </div>
     </div>
   );
 };

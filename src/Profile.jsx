@@ -54,13 +54,13 @@ const Profile = () => {
       if (data.success) {
         setProfileData(data.profile);
         setIsEditing(false);
-        showToast('Успешно');
+        showToast('Настройки сохранены');
         const updatedUser = { ...currentUser, profile: data.profile };
         setCurrentUser(updatedUser);
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
       }
     } catch (err) {
-      showToast('Успешно');
+      showToast('Ошибка при обновлении');
     }
   };
 
@@ -68,7 +68,7 @@ const Profile = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        showToast('?�?�???� ???�?????????? ?�???�???????? (???�???? 5MB)');
+        showToast('Файл слишком большой (макс 5MB)');
         return;
       }
       const reader = new FileReader();
@@ -82,7 +82,7 @@ const Profile = () => {
   const handleLogout = () => {
     setCurrentUser(null);
     localStorage.removeItem('neoanime_user');
-    showToast('Успешно');
+    showToast('Не удалось загрузить');
   };
 
   // --- TIER LIST LOGIC ---
@@ -104,7 +104,7 @@ const Profile = () => {
         body: JSON.stringify({ username: currentUser.username, profileData: { tierList: newTierList } })
       });
     } catch (err) {
-      showToast('???????�???� ???�?? ?????�?�?�???�?????? ?�???�-?�?????�?�');
+      showToast('Ошибка при обновлении тир-листа');
     }
   };
 
@@ -130,7 +130,7 @@ const Profile = () => {
     const tl = getTierList();
     const totalItems = Object.values(tl).reduce((acc, curr) => acc + curr.length, 0);
     if (totalItems >= 50) {
-      showToast('?�?????�?????????� ?�???????� ?�???????� (50)');
+      showToast('Достигнут лимит (50)');
       return;
     }
 
@@ -144,7 +144,7 @@ const Profile = () => {
     setSearchQuery('');
     setSearchResults([]);
     setShowAddForm(false);
-    showToast(`${newItem.name} ?????�?�???�?�???? ?? ?�???� C`);
+    showToast(`${newItem.name} добавлен в тир C`);
   };
 
   const handleDragStart = (e, item) => {
@@ -187,7 +187,7 @@ const Profile = () => {
   };
 
   const handleAddFriend = async () => {
-    if (!currentUser) return showToast('Успешно');
+    if (!currentUser) return showToast('Авторизуйтесь, чтобы продолжить');
     try {
       const res = await fetch(`/api/friends/add`, {
         method: 'POST',
@@ -196,16 +196,16 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Успешно');
+        showToast('Запрос отправлен!');
         setProfileData({...profileData, friendRequests: [...(profileData.friendRequests || []), currentUser.username]});
       }
     } catch (e) {
-      showToast('Успешно');
+      showToast('Ошибка при отправке');
     }
   };
 
   const handleAddFriendByCode = async () => {
-    if (!friendCodeInput.trim()) return showToast('Успешно');
+    if (!friendCodeInput.trim()) return showToast('Введите код друга');
     try {
       const res = await fetch(`/api/friends/add_by_code`, {
         method: 'POST',
@@ -220,7 +220,7 @@ const Profile = () => {
         showToast(data.error);
       }
     } catch (e) {
-      showToast('Успешно');
+      showToast('Ошибка при принятии');
     }
   };
 
@@ -233,18 +233,18 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Успешно');
+        showToast('Заявка отклонена!');
         setProfileData(data.profile);
         setCurrentUser({...currentUser, profile: data.profile});
         localStorage.setItem('neoanime_user', JSON.stringify({...currentUser, profile: data.profile}));
       }
     } catch (e) {
-      showToast('Успешно');
+      showToast('Ошибка');
     }
   };
 
-  if (loading) return <div className="profile-container">?�?�???�???�???� ???�???�???�??...</div>;
-  if (!profileData) return <div className="profile-container"></div>;
+  if (loading) return <div className="profile-container">Загрузка профиля...</div>;
+  if (!profileData) return <div className="profile-container">Профиль не найден</div>;
 
   const tl = getTierList();
   const favorites = profileData.favorites || [];
@@ -260,68 +260,68 @@ const Profile = () => {
           
           {isEditing ? (
             <div className="profile-edit-mode">
-              <label>?????�?�?�?�???� (?�?�???�):</label>
+              <label>Аватар (URL):</label>
               <input type="file" accept="image/*" onChange={handleAvatarUpload} />
               
-              <label>???�?? ?????�?�???� ???� ?�???�?�?�?�????:</label>
+              <label>Фон профиля (URL):</label>
               <input 
                 type="text" 
                 value={editForm.avatar} 
                 onChange={e => setEditForm({...editForm, avatar: e.target.value})} 
                 placeholder="https://..."
               />
-              <label>?? ???�?�?�:</label>
+              <label>О себе:</label>
               <textarea 
                 value={editForm.description} 
                 onChange={e => setEditForm({...editForm, description: e.target.value})} 
-                placeholder="Введите значение..."
+                placeholder="Расскажите о себе..."
               />
-              <button onClick={handleSave} className="btn-save"><Save size={18} /></button>
+              <button onClick={handleSave} className="btn-save"><Save size={18} /> Сохранить</button>
             </div>
           ) : (
             <div className="profile-desc">
-              {profileData.description || '?????�???�?????�?�?�?�?? ???????� ?????�?�???? ???� ?�?�???????�?�?�?� ?? ???�?�?�.'}
+              {profileData.description || 'Пользователь пока не рассказал о себе.'}
             </div>
           )}
           {isOwner && profileData.friendCode && (
             <div style={{marginTop: '10px', display: 'inline-block', padding: '5px 10px', background: 'rgba(0,240,255,0.1)', border: '1px dashed var(--accent-color)', borderRadius: '6px', color: 'var(--accent-color)', fontSize: '0.9rem'}}>
-              ?�?�?? ?????? ???�???�?�?�: <strong>{profileData.friendCode}</strong>
+              Код для друга: <strong>{profileData.friendCode}</strong>
             </div>
           )}
         </div>
         
         {isOwner && !isEditing ? (
           <div className="profile-actions">
-            <button onClick={() => setIsEditing(true)} className="btn-edit"><Edit2 size={18} /></button>
-            <button onClick={handleLogout} className="btn-logout"><LogOut size={18} /></button>
+            <button onClick={() => setIsEditing(true)} className="btn-edit"><Edit2 size={18} /> Редактировать</button>
+            <button onClick={handleLogout} className="btn-logout"><LogOut size={18} /> Выйти</button>
           </div>
         ) : !isOwner && currentUser ? (
           <div className="profile-actions">
             {profileData.friends?.includes(currentUser.username) ? (
-              <button className="btn-save" disabled style={{opacity: 0.5}}><UserCheck size={18} /></button>
+              <button className="btn-save" disabled style={{opacity: 0.5}}><UserCheck size={18} /> В друзьях</button>
             ) : profileData.friendRequests?.includes(currentUser.username) ? (
-              <button className="btn-edit" disabled style={{opacity: 0.5}}><Clock size={18} /></button>
+              <button className="btn-edit" disabled style={{opacity: 0.5}}><Clock size={18} /> Запрос отправлен</button>
             ) : (
-              <button className="btn-save" onClick={handleAddFriend}><UserPlus size={18} /></button>
+              <button className="btn-save" onClick={handleAddFriend}><UserPlus size={18} /> Добавить в друзья</button>
             )}
           </div>
         ) : null}
       </div>
 
       <div className="profile-tabs">
-        <button className={`tab-btn ${activeTab === 'tierlist' ? 'active' : ''}`} onClick={() => setActiveTab('tierlist')}>?????�-?�?????�</button>
-        <button className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}></button>
-        <button className={`tab-btn ${activeTab === 'friends' ? 'active' : ''}`} onClick={() => setActiveTab('friends')}>?�?�???�???? {(isOwner && profileData.friendRequests?.length > 0) ? `(+${profileData.friendRequests.length})` : ''}</button>
-        {isOwner && <button className={`tab-btn ${activeTab === 'add_friend' ? 'active' : ''}`} onClick={() => setActiveTab('add_friend')}></button>}
+        <button className={`tab-btn ${activeTab === 'tierlist' ? 'active' : ''}`} onClick={() => setActiveTab('tierlist')}>Тир-лист</button>
+        <button className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>Избранное</button>
+        <button className={`tab-btn ${activeTab === 'friends' ? 'active' : ''}`} onClick={() => setActiveTab('friends')}>Друзья {(isOwner && profileData.friendRequests?.length > 0) ? `(+${profileData.friendRequests.length})` : ''}</button>
+        {isOwner && <button className={`tab-btn ${activeTab === 'add_friend' ? 'active' : ''}`} onClick={() => setActiveTab('add_friend')}>Добавить друга</button>}
       </div>
 
       {activeTab === 'tierlist' && (
         <div className="profile-tierlist">
           <div className="tierlist-header">
-            <h2>?????�-?�?????� ?�???????� {isOwner && '(???�?�?�?�?�?????????�???�?� ?�???????� ???�?�???? ?�???�?�????)'}</h2>
+            <h2>Тир-лист аниме {isOwner && '(перетаскивайте аниме между тирами)'}</h2>
             {isOwner && (
               <button className="btn-add-tier" onClick={() => setShowAddForm(!showAddForm)}>
-                {showAddForm ? '???�???�???�' : <><Plus size={18}/></>}
+                {showAddForm ? 'Отмена' : <><Plus size={18}/> Добавить аниме</>}
               </button>
             )}
           </div>
@@ -330,11 +330,11 @@ const Profile = () => {
             <div className="tierlist-add-form">
               <input 
                 type="text" 
-                placeholder="Введите значение..." 
+                placeholder="Название аниме на английском..."
                 value={searchQuery} 
                 onChange={handleSearchAnime} 
               />
-              {isSearching && <div style={{color: 'var(--text-secondary)'}}>??????????...</div>}
+              {isSearching && <div style={{color: 'var(--text-secondary)'}}>Поиск...</div>}
               {searchResults.length > 0 && (
                 <div className="tierlist-search-results">
                   {searchResults.map(result => (
@@ -382,7 +382,7 @@ const Profile = () => {
                       )}
                     </div>
                   )) : (
-                    <span style={{color: 'rgba(255,255,255,0.2)'}}></span>
+                    <span style={{color: 'rgba(255,255,255,0.2)'}}>Пусто</span>
                   )}
                 </div>
               </div>
@@ -393,9 +393,9 @@ const Profile = () => {
 
       {activeTab === 'favorites' && (
         <div className="profile-favorites">
-          <h2></h2>
+          <h2>Избранные аниме</h2>
           {favorites.length === 0 ? (
-            <p style={{color: 'var(--text-secondary)'}}>???????????? ???�?�?�?�?????????? ???????� ???????�.</p>
+            <p style={{color: 'var(--text-secondary)'}}>Список избранного пока пуст.</p>
           ) : (
             <div className="favorites-grid">
                {favorites.map(fav => (
@@ -413,22 +413,22 @@ const Profile = () => {
         <div style={{marginTop: '2rem'}}>
           {isOwner && profileData.friendRequests?.length > 0 && (
             <div style={{marginBottom: '2rem'}}>
-              <h3></h3>
+              <h3>Запросы в друзья</h3>
               <div style={{display: 'flex', flexWrap: 'wrap', gap: '15px', marginTop: '10px'}}>
                 {profileData.friendRequests.map(req => (
                   <div key={req} style={{display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '12px', border: '1px solid var(--accent-color)'}}>
                     <Link to={`/profile/${req}`} style={{color: 'white', textDecoration: 'none', fontWeight: 'bold'}}>{req}</Link>
-                    <button onClick={() => handleAcceptFriend(req)} className="btn-save" style={{padding: '5px 15px', fontSize: '0.9rem'}}></button>
+                    <button onClick={() => handleAcceptFriend(req)} className="btn-save" style={{padding: '5px 15px', fontSize: '0.9rem'}}>Принять</button>
                   </div>
                 ))}
               </div>
             </div>
           )}
           
-          <h3></h3>
+          <h3>Список друзей</h3>
           {(!profileData.friends || profileData.friends.length === 0) ? (
             <div style={{padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '10px'}}>
-              ???????� ???�?� ???�???�?�??.
+              Список друзей пуст.
             </div>
           ) : (
             <div style={{display: 'flex', flexWrap: 'wrap', gap: '15px', marginTop: '10px'}}>
@@ -445,14 +445,14 @@ const Profile = () => {
 
       {activeTab === 'add_friend' && isOwner && (
         <div style={{marginTop: '2rem', background: 'rgba(0,0,0,0.3)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center'}}>
-          <h2 style={{marginBottom: '1rem'}}></h2>
+          <h2 style={{marginBottom: '1rem'}}>Добавить друга по коду</h2>
           <p style={{color: 'var(--text-secondary)', marginBottom: '1.5rem'}}>
-            ?�???�?????�?� 6-?�???�?�???�?? ?????? ???�?????�, ?�?�???�?� ???�???�?�?????�?? ?�???? ?�?�????????.
+            Введите 6-значный код друга, чтобы отправить ему запрос.
           </p>
           <div style={{display: 'flex', justifyContent: 'center', gap: '10px', maxWidth: '400px', margin: '0 auto'}}>
             <input 
               type="text" 
-              placeholder="???�???�?????�?�: 123456" 
+              placeholder="Например: 123456"
               value={friendCodeInput}
               onChange={e => setFriendCodeInput(e.target.value)}
               style={{
