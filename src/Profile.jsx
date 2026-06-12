@@ -54,13 +54,13 @@ const Profile = () => {
       if (data.success) {
         setProfileData(data.profile);
         setIsEditing(false);
-        showToast('???�???�???�?? ???�???????�?�??');
+        showToast('Успешно');
         const updatedUser = { ...currentUser, profile: data.profile };
         setCurrentUser(updatedUser);
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
       }
     } catch (err) {
-      showToast('???????�???� ???�?? ?????�?�?�???�??????');
+      showToast('Успешно');
     }
   };
 
@@ -82,7 +82,7 @@ const Profile = () => {
   const handleLogout = () => {
     setCurrentUser(null);
     localStorage.removeItem('neoanime_user');
-    showToast('?�?� ???�???�?? ???� ?�?????�?????�?�');
+    showToast('Успешно');
   };
 
   // --- TIER LIST LOGIC ---
@@ -187,7 +187,7 @@ const Profile = () => {
   };
 
   const handleAddFriend = async () => {
-    if (!currentUser) return showToast('?????�?�?�?�?� ???????????�?� ?? ?�?????�?????�');
+    if (!currentUser) return showToast('Успешно');
     try {
       const res = await fetch(`/api/friends/add`, {
         method: 'POST',
@@ -196,16 +196,16 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('?�?�???????� ???�???�?�???�?�???�!');
+        showToast('Успешно');
         setProfileData({...profileData, friendRequests: [...(profileData.friendRequests || []), currentUser.username]});
       }
     } catch (e) {
-      showToast('???????�???� ???�?? ?????�?�???�?�??????');
+      showToast('Успешно');
     }
   };
 
   const handleAddFriendByCode = async () => {
-    if (!friendCodeInput.trim()) return showToast('?�???�?????�?� ?????? ???�?????�');
+    if (!friendCodeInput.trim()) return showToast('Успешно');
     try {
       const res = await fetch(`/api/friends/add_by_code`, {
         method: 'POST',
@@ -220,7 +220,7 @@ const Profile = () => {
         showToast(data.error);
       }
     } catch (e) {
-      showToast('???????�???� ???�?? ?????�?�???�?�??????');
+      showToast('Успешно');
     }
   };
 
@@ -233,18 +233,18 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('?�?�???????� ???�???????�?�!');
+        showToast('Успешно');
         setProfileData(data.profile);
         setCurrentUser({...currentUser, profile: data.profile});
         localStorage.setItem('neoanime_user', JSON.stringify({...currentUser, profile: data.profile}));
       }
     } catch (e) {
-      showToast('???????�???�');
+      showToast('Успешно');
     }
   };
 
   if (loading) return <div className="profile-container">?�?�???�???�???� ???�???�???�??...</div>;
-  if (!profileData) return <div className="profile-container">???�???�???�?? ???� ???�?????�??</div>;
+  if (!profileData) return <div className="profile-container">Текст</div>;
 
   const tl = getTierList();
   const favorites = profileData.favorites || [];
@@ -274,9 +274,9 @@ const Profile = () => {
               <textarea 
                 value={editForm.description} 
                 onChange={e => setEditForm({...editForm, description: e.target.value})} 
-                placeholder="?�?�???????�?�???�?� ?? ???�?�?�..."
+                placeholder="Введите значение..."
               />
-              <button onClick={handleSave} className="btn-save"><Save size={18} /> ?????�?�?�?????�??</button>
+              <button onClick={handleSave} className="btn-save"><Save size={18} />Текст</button>
             </div>
           ) : (
             <div className="profile-desc">
@@ -292,17 +292,17 @@ const Profile = () => {
         
         {isOwner && !isEditing ? (
           <div className="profile-actions">
-            <button onClick={() => setIsEditing(true)} className="btn-edit"><Edit2 size={18} /> ?�?�???�???�???�?????�?�??</button>
-            <button onClick={handleLogout} className="btn-logout"><LogOut size={18} /> ?�?�???�??</button>
+            <button onClick={() => setIsEditing(true)} className="btn-edit"><Edit2 size={18} />Текст</button>
+            <button onClick={handleLogout} className="btn-logout"><LogOut size={18} />Текст</button>
           </div>
         ) : !isOwner && currentUser ? (
           <div className="profile-actions">
             {profileData.friends?.includes(currentUser.username) ? (
-              <button className="btn-save" disabled style={{opacity: 0.5}}><UserCheck size={18} /> ?� ???�???�?????�</button>
+              <button className="btn-save" disabled style={{opacity: 0.5}}><UserCheck size={18} />Текст</button>
             ) : profileData.friendRequests?.includes(currentUser.username) ? (
-              <button className="btn-edit" disabled style={{opacity: 0.5}}><Clock size={18} /> ?�?�???????� ???�???�?�???�?�???�</button>
+              <button className="btn-edit" disabled style={{opacity: 0.5}}><Clock size={18} />Текст</button>
             ) : (
-              <button className="btn-save" onClick={handleAddFriend}><UserPlus size={18} /> ?�???�?�?????�?? ?? ???�???�????</button>
+              <button className="btn-save" onClick={handleAddFriend}><UserPlus size={18} />Текст</button>
             )}
           </div>
         ) : null}
@@ -310,9 +310,9 @@ const Profile = () => {
 
       <div className="profile-tabs">
         <button className={`tab-btn ${activeTab === 'tierlist' ? 'active' : ''}`} onClick={() => setActiveTab('tierlist')}>?????�-?�?????�</button>
-        <button className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>???�?�?�?�???????�</button>
+        <button className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>Текст</button>
         <button className={`tab-btn ${activeTab === 'friends' ? 'active' : ''}`} onClick={() => setActiveTab('friends')}>?�?�???�???? {(isOwner && profileData.friendRequests?.length > 0) ? `(+${profileData.friendRequests.length})` : ''}</button>
-        {isOwner && <button className={`tab-btn ${activeTab === 'add_friend' ? 'active' : ''}`} onClick={() => setActiveTab('add_friend')}>?�???�?�?????�?? ???�?????�</button>}
+        {isOwner && <button className={`tab-btn ${activeTab === 'add_friend' ? 'active' : ''}`} onClick={() => setActiveTab('add_friend')}>Текст</button>}
       </div>
 
       {activeTab === 'tierlist' && (
@@ -321,7 +321,7 @@ const Profile = () => {
             <h2>?????�-?�?????� ?�???????� {isOwner && '(???�?�?�?�?�?????????�???�?� ?�???????� ???�?�???? ?�???�?�????)'}</h2>
             {isOwner && (
               <button className="btn-add-tier" onClick={() => setShowAddForm(!showAddForm)}>
-                {showAddForm ? '???�???�???�' : <><Plus size={18}/> ?�???�?�?????�?? ?�???????�</>}
+                {showAddForm ? '???�???�???�' : <><Plus size={18}/>Текст</>}
               </button>
             )}
           </div>
@@ -330,7 +330,7 @@ const Profile = () => {
             <div className="tierlist-add-form">
               <input 
                 type="text" 
-                placeholder="?????????? ?�???????� ???� ?�???�?�?????�?�????..." 
+                placeholder="Введите значение..." 
                 value={searchQuery} 
                 onChange={handleSearchAnime} 
               />
@@ -382,7 +382,7 @@ const Profile = () => {
                       )}
                     </div>
                   )) : (
-                    <span style={{color: 'rgba(255,255,255,0.2)'}}>???????�??</span>
+                    <span style={{color: 'rgba(255,255,255,0.2)'}}>Текст</span>
                   )}
                 </div>
               </div>
@@ -393,7 +393,7 @@ const Profile = () => {
 
       {activeTab === 'favorites' && (
         <div className="profile-favorites">
-          <h2>???�?�?�?�?????�?� ?�???????�</h2>
+          <h2>Текст</h2>
           {favorites.length === 0 ? (
             <p style={{color: 'var(--text-secondary)'}}>???????????? ???�?�?�?�?????????? ???????� ???????�.</p>
           ) : (
@@ -413,19 +413,19 @@ const Profile = () => {
         <div style={{marginTop: '2rem'}}>
           {isOwner && profileData.friendRequests?.length > 0 && (
             <div style={{marginBottom: '2rem'}}>
-              <h3>?�?�???????? ?? ???�???�????</h3>
+              <h3>Текст</h3>
               <div style={{display: 'flex', flexWrap: 'wrap', gap: '15px', marginTop: '10px'}}>
                 {profileData.friendRequests.map(req => (
                   <div key={req} style={{display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '12px', border: '1px solid var(--accent-color)'}}>
                     <Link to={`/profile/${req}`} style={{color: 'white', textDecoration: 'none', fontWeight: 'bold'}}>{req}</Link>
-                    <button onClick={() => handleAcceptFriend(req)} className="btn-save" style={{padding: '5px 15px', fontSize: '0.9rem'}}>???�???????�??</button>
+                    <button onClick={() => handleAcceptFriend(req)} className="btn-save" style={{padding: '5px 15px', fontSize: '0.9rem'}}>Текст</button>
                   </div>
                 ))}
               </div>
             </div>
           )}
           
-          <h3>???????????? ???�???�?�??</h3>
+          <h3>Текст</h3>
           {(!profileData.friends || profileData.friends.length === 0) ? (
             <div style={{padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '10px'}}>
               ???????� ???�?� ???�???�?�??.
@@ -445,7 +445,7 @@ const Profile = () => {
 
       {activeTab === 'add_friend' && isOwner && (
         <div style={{marginTop: '2rem', background: 'rgba(0,0,0,0.3)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center'}}>
-          <h2 style={{marginBottom: '1rem'}}>?�???�?�?????�?? ???�?????� ???? ????????</h2>
+          <h2 style={{marginBottom: '1rem'}}>Текст</h2>
           <p style={{color: 'var(--text-secondary)', marginBottom: '1.5rem'}}>
             ?�???�?????�?� 6-?�???�?�???�?? ?????? ???�?????�, ?�?�???�?� ???�???�?�?????�?? ?�???? ?�?�????????.
           </p>

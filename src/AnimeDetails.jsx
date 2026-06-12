@@ -94,10 +94,10 @@ const AnimeDetails = () => {
              return;
           }
        }
-       showToast('?????????� ???� ???�?????�???? ???? ?? ?????????? ?�?�?�?�.');
+       showToast('Успешно');
     } catch(e) {
        console.error(e);
-       showToast('?�?????�?? ???� ???�?????�????.');
+       showToast('Успешно');
     }
     setKodikLoading(false);
   };
@@ -116,7 +116,7 @@ const AnimeDetails = () => {
           setKodikUrl(`https://cache.libria.fun${hlsUrl}`);
           setActiveKodikEpisode(episode);
        } else {
-          showToast('???�?�???? ?�?�?� ???� ???�???�?�');
+          showToast('Успешно');
        }
        setKodikLoading(false);
        return;
@@ -205,7 +205,7 @@ const AnimeDetails = () => {
 
   const updateProfileData = async (newData, successMsg, errorMsg) => {
     if (!currentUser) {
-      showToast('?????�?�?�?�?� ???????????�?� ?? ?�?????�?????�');
+      showToast('Успешно');
       return false;
     }
     try {
@@ -226,7 +226,7 @@ const AnimeDetails = () => {
         return false;
       }
     } catch (err) {
-      if (errorMsg) showToast('???????�???� ???�?�??');
+      if (errorMsg) showToast('Успешно');
       return false;
     }
   };
@@ -269,7 +269,7 @@ const AnimeDetails = () => {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    showToast('?????�?�???� ???????????�?????�???� ?? ?�???�?�?� ???�???�???�!');
+    showToast('Успешно');
   };
 
   const submitComment = async () => {
@@ -293,10 +293,10 @@ const AnimeDetails = () => {
       if (data.success) {
         setComments([...comments, data.comment]);
         setNewComment('');
-        showToast('?????????�???�?�?�???? ?????�?�???�?�??');
+        showToast('Успешно');
       }
     } catch (e) {
-      showToast('???????�???� ???�???�?�?????? ?????????�???�?�?�????');
+      showToast('Успешно');
     }
   };
 
@@ -309,7 +309,7 @@ const AnimeDetails = () => {
   }
 
   if (!shikimoriAnime) {
-    return <div style={{textAlign: 'center', padding: '5rem', fontSize: '1.2rem'}}>?????????� ???� ???�?????�????</div>;
+    return <div style={{textAlign: 'center', padding: '5rem', fontSize: '1.2rem'}}>Текст</div>;
   }
 
   const imgOriginal = shikimoriAnime.image?.original;
@@ -327,9 +327,7 @@ const AnimeDetails = () => {
         </div>
         
         <button className="btn-watch-main" onClick={scrollToPlayer}>
-          <Play fill="white" size={24} />
-          ?????????�?�???�
-        </button>
+          <Play fill="white" size={24} />Текст</button>
         
         <div className="action-buttons" style={{position: 'relative'}}>
           <button className={`btn-action ${isFavorite ? 'active' : ''}`} onClick={handleFavorite} title="?� ???�?�?�?�???????�">
@@ -342,7 +340,7 @@ const AnimeDetails = () => {
             <MessageSquare size={20} />
           </button>
           <div style={{position: 'relative'}}>
-            <button className={`btn-action ${userRating > 0 ? 'active' : ''}`} onClick={() => {if(currentUser) setShowRatingModal(!showRatingModal); else showToast('?????�?�?�?�?� ???????????�?� ?? ?�?????�?????�');}} title="???�?�?????�??">
+            <button className={`btn-action ${userRating > 0 ? 'active' : ''}`} onClick={() => {if(currentUser) setShowRatingModal(!showRatingModal); else showToast('Успешно');}} title="???�?�?????�??">
               <Star size={20} fill={userRating > 0 ? 'var(--accent-color)' : 'none'} color={userRating > 0 ? 'var(--accent-color)' : 'currentColor'} />
             </button>
             {showRatingModal && (
@@ -372,19 +370,19 @@ const AnimeDetails = () => {
         
         <div className="stats-grid">
           <div className="stat-card">
-            <span className="stat-label">?�???? ???�?�?????�</span>
+            <span className="stat-label">Текст</span>
             <div className="stat-value"><span className="rating-badge">{shikimoriAnime.aired_on?.slice(0, 4) || '?'}</span></div>
           </div>
           <div className="stat-card">
-            <span className="stat-label">???�?�?�????</span>
+            <span className="stat-label">Текст</span>
             <span className="stat-value">{shikimoriAnime.status === 'released' ? '?�?�???�??' : '??????????????'}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">?�?????�?????�</span>
+            <span className="stat-label">Текст</span>
             <span className="stat-value">{shikimoriAnime.episodes_aired || shikimoriAnime.episodes || 0} / {shikimoriAnime.episodes || '?'}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">???�?�?????�</span>
+            <span className="stat-label">Текст</span>
             <span className="stat-value"><Star size={16} color="gold" fill="gold" /> {userRating > 0 ? `${userRating}/10 (???�???�)` : `${shikimoriAnime.score || '?'}/10`}</span>
           </div>
         </div>
@@ -415,7 +413,7 @@ const AnimeDetails = () => {
                 onEpisodeChange={(epId) => fetchKodikEpisode(code, epId, activeKodikTranslation || kodikData?.active_translation)}
               />
             ) : (
-              <div style={{padding: '5rem', textAlign: 'center'}}>?�?????�?? ???�???????�???????? ???�?? ?????�?�?�?? ???�?�???????�?�?�???�?�?�?�?�??</div>
+              <div style={{padding: '5rem', textAlign: 'center'}}>Текст</div>
             )}
           </div>
         </div>
@@ -466,8 +464,7 @@ const AnimeDetails = () => {
                 disabled={!currentUser || !newComment.trim()}
                 style={{alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'var(--accent-gradient)', color: 'black', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: (!currentUser || !newComment.trim()) ? 'not-allowed' : 'pointer', opacity: (!currentUser || !newComment.trim()) ? 0.5 : 1}}
               >
-                <Send size={16} /> ???????�???�?????�
-              </button>
+                <Send size={16} />Текст</button>
             </div>
           </div>
         </div>

@@ -73,7 +73,7 @@ const WatchRoom = () => {
           }
         });
       } catch (err) {
-        showToast('???????�???� ???????�?????� ?? ???????�???�??????');
+        showToast('Успешно');
       }
     } else {
       if (localStreamRef.current) {
@@ -88,7 +88,7 @@ const WatchRoom = () => {
 
   useEffect(() => {
     if (!currentUser) {
-      showToast('?????�?�?�?�?� ???????????�?� ?? ?�?????�?????�');
+      showToast('Успешно');
       navigate('/lobbies');
       return;
     }
@@ -252,13 +252,10 @@ const WatchRoom = () => {
           </div>
           <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
             {!isHost && (
-              <button className="btn-save" onClick={takeHost} style={{padding: '5px 10px', fontSize: '0.8rem'}}>
-                ???�?�?�?? ?�?????�????
-              </button>
+              <button className="btn-save" onClick={takeHost} style={{padding: '5px 10px', fontSize: '0.8rem'}}>Текст</button>
             )}
             <button className="btn-action" onClick={() => navigate('/lobbies')} style={{background: 'rgba(255,0,0,0.2)', color: 'red'}}>
-              <LogOut size={18} /> ?�?�???�??
-            </button>
+              <LogOut size={18} />Текст</button>
           </div>
         </div>
 
@@ -296,9 +293,7 @@ const WatchRoom = () => {
                 }}
               />
               {!isHost && (
-                <div style={{position: 'absolute', top: 10, left: 10, background: 'rgba(0,0,0,0.7)', padding: '5px 10px', borderRadius: '8px', color: 'white', zIndex: 10}}>
-                  ?????�?????? ?�?????� ?????�?�?� ?????�?�???�???�?? ???�?�?�?�????
-                </div>
+                <div style={{position: 'absolute', top: 10, left: 10, background: 'rgba(0,0,0,0.7)', padding: '5px 10px', borderRadius: '8px', color: 'white', zIndex: 10}}>Текст</div>
               )}
             </div>
           ) : (
@@ -317,7 +312,7 @@ const WatchRoom = () => {
                 <Search color="var(--text-secondary)" size={20} />
                 <input 
                   type="text" 
-                  placeholder="???????�: ?????????? ?�???????� ???�?? ???�?????????�?�?�..." 
+                  placeholder="Введите значение..." 
                   value={searchQuery}
                   onChange={handleSearchAnime}
                   style={{flex: 1, background: 'transparent', border: 'none', color: 'white', outline: 'none'}}
@@ -374,9 +369,7 @@ const WatchRoom = () => {
 
         {/* Chat */}
         <div style={{flex: 1, background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
-          <div style={{padding: '15px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--border-color)', color: 'white', fontWeight: 'bold'}}>
-            ?�?�?� ?????????�?�?�
-          </div>
+          <div style={{padding: '15px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--border-color)', color: 'white', fontWeight: 'bold'}}>Текст</div>
           
           <div style={{flex: 1, overflowY: 'auto', padding: '15px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
             {chat.map((msg, idx) => (
@@ -393,7 +386,7 @@ const WatchRoom = () => {
           <div style={{padding: '10px', background: 'rgba(0,0,0,0.5)', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '5px'}}>
             <input 
               type="text" 
-              placeholder="???�???????�?�??..." 
+              placeholder="Введите значение..." 
               value={chatInput}
               onChange={e => setChatInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && sendChat()}

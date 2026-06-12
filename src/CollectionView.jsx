@@ -30,7 +30,7 @@ const CollectionView = () => {
         if (found) {
           setCollection(found);
         } else {
-          setError('???????�???�???� ???� ???�?????�???�');
+          setError('Ошибка');
         }
       })
       .catch(e => setError(e.message))
@@ -62,7 +62,7 @@ const CollectionView = () => {
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
       }
     } catch (e) {
-      showToast('???????�???� ???�?? ?????�?�?�???�??????');
+      showToast('Успешно');
     }
   };
 
@@ -87,7 +87,7 @@ const CollectionView = () => {
   const handleAddAnime = (anime) => {
     // Check if already in collection
     if (collection.items.some(i => i.id === anime.id.toString())) {
-      return showToast('???�?� ?�???�?? ?? ???????�???�???�!');
+      return showToast('Успешно');
     }
 
     const newItem = { 
@@ -101,7 +101,7 @@ const CollectionView = () => {
     
     setSearchQuery('');
     setSearchResults([]);
-    showToast(`?�???�?�???�?�????: ${newItem.name}`);
+    showToast(`Успешно: ${newItem.name}`);
   };
 
   const handleRemoveAnime = (e, animeId) => {
@@ -112,7 +112,7 @@ const CollectionView = () => {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    showToast('?????�?�???� ???� ???????�???�???? ???????????�?????�???�!');
+    showToast('Успешно');
   };
 
   const handleDeleteCollection = async () => {
@@ -131,14 +131,14 @@ const CollectionView = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('???????�???�???� ?????�?�?�???�');
+        showToast('Успешно');
         const updatedUser = { ...currentUser, profile: { ...currentUser.profile, collections: updatedCollections } };
         setCurrentUser(updatedUser);
         localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
         navigate('/collections');
       }
     } catch (e) {
-      showToast('???????�???� ???�?? ?????�?�?�??????');
+      showToast('Успешно');
     }
   };
 
@@ -154,22 +154,20 @@ const CollectionView = () => {
         </div>
         <div style={{display: 'flex', gap: '10px'}}>
           <button className="btn-action" onClick={handleShare} style={{padding: '10px 20px', background: 'rgba(0,240,255,0.1)', color: 'var(--accent-color)'}}>
-            <Share2 size={18} /> ???????�?�???�??????
-          </button>
+            <Share2 size={18} />Текст</button>
           {isOwner && (
             <button className="btn-action" onClick={handleDeleteCollection} style={{padding: '10px 20px', background: 'rgba(255,0,0,0.1)', color: 'red'}}>
-              <Trash2 size={18} /> ?????�?�???�??
-            </button>
+              <Trash2 size={18} />Текст</button>
           )}
         </div>
       </div>
 
       {isOwner && (
         <div style={{background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '2rem', border: '1px solid var(--border-color)', position: 'relative'}}>
-          <h3 style={{color: 'white', marginBottom: '10px'}}>?�???�?�?????�?? ?�???????�</h3>
+          <h3 style={{color: 'white', marginBottom: '10px'}}>Текст</h3>
           <input 
             type="text" 
-            placeholder="?????????? ?�???????� ???� ?�???�?�?????�?�????..." 
+            placeholder="Введите значение..." 
             value={searchQuery} 
             onChange={handleSearchAnime} 
             style={{width: '100%', padding: '12px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}

@@ -70,14 +70,12 @@ const Catalog = () => {
               name="q"
               type="text" 
               className="search-input" 
-              placeholder="???????�?�?? ?�???????�..." 
+              placeholder="Введите значение..." 
               defaultValue={searchQuery}
               style={{ width: '100%' }}
             />
           </div>
-          <button type="submit" style={{ background: 'var(--accent-gradient)', color: '#fff', border: 'none', padding: '0 1.5rem', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>
-            ???�???�??
-          </button>
+          <button type="submit" style={{ background: 'var(--accent-gradient)', color: '#fff', border: 'none', padding: '0 1.5rem', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Текст</button>
         </form>
       </div>
 
@@ -121,9 +119,7 @@ const Catalog = () => {
                 disabled={page === 1} 
                 onClick={() => setPage(p => p - 1)}
                 style={{ padding: '0.8rem 1.5rem', borderRadius: '8px', background: 'var(--bg-surface)', color: '#fff', border: '1px solid var(--border-color)', cursor: page === 1 ? 'not-allowed' : 'pointer', opacity: page === 1 ? 0.5 : 1 }}
-              >
-                ???�?�?�??
-              </button>
+              >Текст</button>
               <span style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
                 ???�?�?�?????�?� {page} ???� {totalPages}
               </span>
@@ -131,9 +127,7 @@ const Catalog = () => {
                 disabled={page === totalPages} 
                 onClick={() => setPage(p => p + 1)}
                 style={{ padding: '0.8rem 1.5rem', borderRadius: '8px', background: 'var(--bg-surface)', color: '#fff', border: '1px solid var(--border-color)', cursor: page === totalPages ? 'not-allowed' : 'pointer', opacity: page === totalPages ? 0.5 : 1 }}
-              >
-                ?�???�?�?�??
-              </button>
+              >Текст</button>
             </div>
           )}
         </>
