@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
@@ -82,7 +83,7 @@ app.get('/api/kodik', async (req, res) => {
     const path = urlObj.pathname + urlObj.search;
     
     const protocol = req.protocol || 'http';
-    const host = req.headers.host || 'localhost:3001';
+    const host = req.get('host') || 'localhost:3001';
     const proxyUrl = `${protocol}://${host}/proxy/${domain}${path}`;
 
     return res.json({ 
