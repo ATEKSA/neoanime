@@ -73,7 +73,7 @@ const WatchRoom = () => {
           }
         });
       } catch (err) {
-        showToast('Успешно');
+        showToast('Ошибка при подключении к комнате');
       }
     } else {
       if (localStreamRef.current) {
@@ -88,7 +88,7 @@ const WatchRoom = () => {
 
   useEffect(() => {
     if (!currentUser) {
-      showToast('Успешно');
+      showToast('Авторизуйтесь, чтобы управлять');
       navigate('/lobbies');
       return;
     }
@@ -129,7 +129,7 @@ const WatchRoom = () => {
       password: location.state?.password || ''
     }, (response) => {
       if (!response.success) {
-        showToast(response.error || '???????�???� ???�?????� ?? ?�???�?�??');
+        showToast(response.error || 'Ошибка подключения к комнате');
         navigate('/lobbies');
       } else {
         setRoomData(response.lobby);
@@ -235,7 +235,7 @@ const WatchRoom = () => {
     socket.emit('take_host', { roomId, username: currentUser.username });
   };
 
-  if (!roomData) return <div style={{padding: '5rem', textAlign: 'center'}}>?????????�???�?�?????� ?? ?????????�?�?�...</div>;
+  if (!roomData) return <div style={{padding: '5rem', textAlign: 'center'}}>Подключение к комнате...</div>;
 
   const isHost = roomData.host === currentUser?.username;
 
@@ -252,10 +252,13 @@ const WatchRoom = () => {
           </div>
           <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
             {!isHost && (
-              <button className="btn-save" onClick={takeHost} style={{padding: '5px 10px', fontSize: '0.8rem'}}>Текст</button>
+              <button className="btn-save" onClick={takeHost} style={{padding: '5px 10px', fontSize: '0.8rem'}}>
+                Взять хост
+              </button>
             )}
             <button className="btn-action" onClick={() => navigate('/lobbies')} style={{background: 'rgba(255,0,0,0.2)', color: 'red'}}>
-              <LogOut size={18} />Текст</button>
+              <LogOut size={18} /> Выйти
+            </button>
           </div>
         </div>
 
@@ -293,13 +296,15 @@ const WatchRoom = () => {
                 }}
               />
               {!isHost && (
-                <div style={{position: 'absolute', top: 10, left: 10, background: 'rgba(0,0,0,0.7)', padding: '5px 10px', borderRadius: '8px', color: 'white', zIndex: 10}}>Текст</div>
+                <div style={{position: 'absolute', top: 10, left: 10, background: 'rgba(0,0,0,0.7)', padding: '5px 10px', borderRadius: '8px', color: 'white', zIndex: 10}}>
+                  Только хост может управлять плеером
+                </div>
               )}
             </div>
           ) : (
             <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', flexDirection: 'column', gap: '10px'}}>
               <Play size={48} opacity={0.2} />
-              <h2>Плеер загружается...</h2>
+              <h2>Плеер не запущен...</h2>
             </div>
           )}
         </div>
@@ -312,7 +317,7 @@ const WatchRoom = () => {
                 <Search color="var(--text-secondary)" size={20} />
                 <input 
                   type="text" 
-                  placeholder="Введите значение..." 
+                  placeholder="Хост: Поиск аниме для просмотра..."
                   value={searchQuery}
                   onChange={handleSearchAnime}
                   style={{flex: 1, background: 'transparent', border: 'none', color: 'white', outline: 'none'}}
@@ -369,7 +374,9 @@ const WatchRoom = () => {
 
         {/* Chat */}
         <div style={{flex: 1, background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
-          <div style={{padding: '15px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--border-color)', color: 'white', fontWeight: 'bold'}}>Чат комнаты</div>
+          <div style={{padding: '15px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--border-color)', color: 'white', fontWeight: 'bold'}}>
+            Чат комнаты
+          </div>
           
           <div style={{flex: 1, overflowY: 'auto', padding: '15px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
             {chat.map((msg, idx) => (
@@ -386,7 +393,7 @@ const WatchRoom = () => {
           <div style={{padding: '10px', background: 'rgba(0,0,0,0.5)', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '5px'}}>
             <input 
               type="text" 
-              placeholder="Введите значение..." 
+              placeholder="Введите сообщение..."
               value={chatInput}
               onChange={e => setChatInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && sendChat()}

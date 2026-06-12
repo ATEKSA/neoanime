@@ -32,8 +32,8 @@ const Lobbies = () => {
   }, []);
 
   const handleCreate = () => {
-    if (!currentUser) return showToast('?�?????????�?�, ?�?�???�?� ?????�???�?�?? ?????????�?�??');
-    if (newRoomName.length < 3) return showToast('???�?�???�?????� ?????????????? 3 ???????????�?�');
+    if (!currentUser) return showToast('Авторизуйтесь, чтобы создать комнату');
+    if (newRoomName.length < 3) return showToast('Название должно содержать минимум 3 символа');
 
     socket.emit('create_lobby', {
       name: newRoomName.trim(),
@@ -43,16 +43,16 @@ const Lobbies = () => {
       friendsOnly: friendsOnly
     }, (response) => {
       if (response.success) {
-        showToast('Успешно');
+        showToast('Комната успешно создана!');
         navigate(`/room/${response.roomId}`);
       } else {
-        showToast(response.error || '???????�???� ?????�???�??????');
+        showToast(response.error || 'Ошибка создания комнаты');
       }
     });
   };
 
   const handleJoin = (roomId, hasPassword) => {
-    if (!currentUser) return showToast('?�?????????�?�, ?�?�???�?� ???�???????�?????????�??????');
+    if (!currentUser) return showToast('Авторизуйтесь, чтобы присоединиться');
     
     if (hasPassword && joinRoomId !== roomId) {
       setJoinRoomId(roomId);
@@ -69,7 +69,7 @@ const Lobbies = () => {
         navigate(`/room/${roomId}`, { state: { password: joinPassword } });
       } else {
         showToast(response.error);
-        if (response.error === '???�???�?�???�?? ???�?�???�??') setJoinPassword('');
+        if (response.error === 'Неверный пароль') setJoinPassword('');
       }
     });
   };
@@ -78,9 +78,10 @@ const Lobbies = () => {
     <div style={{padding: '2rem'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
         <h1 style={{color: 'white', display: 'flex', alignItems: 'center', gap: '10px'}}>
-          <Users color="var(--accent-color)" /> Совместный просмотр</h1>
+          <Users color="var(--accent-color)" /> Совместный просмотр
+        </h1>
         <button className="btn-save" onClick={() => setShowCreate(!showCreate)}>
-          {showCreate ? '???�???�???�' : <><Plus size={18} /></>}
+          {showCreate ? 'Отмена' : <><Plus size={18} /> Создать комнату</>}
         </button>
       </div>
 
@@ -90,28 +91,32 @@ const Lobbies = () => {
           <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
             <input 
               type="text" 
-              placeholder="???�?�???�?????� ?????????�?�?� (???�???�: ???????�?�???? ???�?�???�??)" 
+              placeholder="Название комнаты (напр: Смотрим аниме)"
               value={newRoomName}
               onChange={e => setNewRoomName(e.target.value)}
               style={{padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
             />
             <input 
               type="password" 
-              placeholder="???�?�???�?? (???�???�???�?�?�?�?�??????)" 
+              placeholder="Пароль (необязательно)"
               value={newRoomPassword}
               onChange={e => setNewRoomPassword(e.target.value)}
               style={{padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
             />
             <label style={{display: 'flex', alignItems: 'center', gap: '10px', color: 'white', cursor: 'pointer'}}>
-              <input type="checkbox" checked={friendsOnly} onChange={e => setFriendsOnly(e.target.checked)} /> Только для друзей</label>
-            <button className="btn-save" onClick={handleCreate} style={{alignSelf: 'flex-start', marginTop: '10px'}}>Создать комнату</button>
+              <input type="checkbox" checked={friendsOnly} onChange={e => setFriendsOnly(e.target.checked)} />
+              Только для друзей
+            </label>
+            <button className="btn-save" onClick={handleCreate} style={{alignSelf: 'flex-start', marginTop: '10px'}}>
+              Создать
+            </button>
           </div>
         </div>
       )}
 
       {lobbies.length === 0 ? (
         <div style={{textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}>
-          ???�?� ?�???�???????�?� ?????????�?�. ?�???????�?� ???�?�???�????!
+          Нет активных комнат. Создайте первую!
         </div>
       ) : (
         <div style={{display: 'grid', gap: '15px'}}>
@@ -124,11 +129,11 @@ const Lobbies = () => {
                   {l.friendsOnly ? <UsersRound size={16} color="var(--accent-color)" /> : <Globe size={16} color="var(--text-secondary)" />}
                 </h3>
                 <div style={{color: 'var(--text-secondary)', fontSize: '0.9rem'}}>
-                  ???????�: <strong style={{color: 'var(--accent-color)'}}>{l.host}</strong> ?�? ???�?�???�??????????: {l.memberCount}/10
+                  Хост: <strong style={{color: 'var(--accent-color)'}}>{l.host}</strong> | Участников: {l.memberCount}/10
                 </div>
                 {l.currentAnime && (
                   <div style={{color: 'white', marginTop: '5px', fontSize: '0.9rem'}}>
-                    ???????�?�???�: {l.currentAnime.name}
+                    Смотрят: {l.currentAnime.name}
                   </div>
                 )}
               </div>
@@ -137,7 +142,7 @@ const Lobbies = () => {
                 <div style={{display: 'flex', gap: '10px'}}>
                   <input 
                     type="password" 
-                    placeholder="Введите значение..." 
+                    placeholder="Пароль..."
                     value={joinPassword}
                     onChange={e => setJoinPassword(e.target.value)}
                     style={{padding: '8px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
@@ -152,7 +157,7 @@ const Lobbies = () => {
                   disabled={l.memberCount >= 10}
                   style={{opacity: l.memberCount >= 10 ? 0.5 : 1}}
                 >
-                  {l.memberCount >= 10 ? '???�?�?�?????�???�???�' : '?�?????�??'}
+                  {l.memberCount >= 10 ? 'Переполнена' : 'Войти'}
                 </button>
               )}
             </div>

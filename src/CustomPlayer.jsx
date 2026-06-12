@@ -234,10 +234,10 @@ const CustomPlayer = ({
         
         if (isRightSide) {
           videoRef.current.currentTime = Math.min(videoRef.current.duration, videoRef.current.currentTime + 5);
-          setSkipIndicator({ type: 'forward', text: '+ 5 ???�??', key: Date.now() });
+          setSkipIndicator({ type: 'forward', text: '+ 5 сек', key: Date.now() });
         } else {
           videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 5);
-          setSkipIndicator({ type: 'backward', text: '- 5 ???�??', key: Date.now() });
+          setSkipIndicator({ type: 'backward', text: '- 5 сек', key: Date.now() });
         }
         
         // Ensure video is playing after double tap
@@ -798,11 +798,11 @@ const CustomPlayer = ({
           background: 'rgba(0,0,0,0.9)', zIndex: 50, display: 'flex', flexDirection: 'column', 
           justifyContent: 'center', alignItems: 'center', color: 'white', textAlign: 'center', padding: '20px'
         }}>
-          <h2 style={{color: '#ff4444', marginBottom: '10px'}}>??�??? ?�?????�?? ?�?�?�?�???????�?????�????</h2>
+          <h2 style={{color: '#ff4444', marginBottom: '10px'}}>Видео недоступно или заблокировано</h2>
           <p style={{maxWidth: '500px', lineHeight: '1.5', color: 'var(--text-secondary)'}}>
-            ?? ?????�?�?�?�??????, ???�???????� ???????�?? ?�?�?�?? ?????�?�?�?? ???? ?�?�?�?�?????�?????? ???�?�???????�?�?�???�?�?�?�?? ?? ???�???�?? ?�?�?????????� (Kodik).
+            К сожалению, данный провайдер заблокировал доступ к видео в вашем регионе (Kodik).
             <br/><br/>
-            ???????�???�?????�?� <strong>???????�?????�?? ???�?????�????</strong> (?�?�???�?? ?�?�???????�?????� ?�???�?????? ?????�?�???�?�?�?????�?� ???�?�?�???????�) ???�?? ?????????�???�?????�?� VPN ?? ?�???�?????�?????????? IP.
+            Попробуйте <strong>сменить сервер</strong> (нажмите шестеренку и выберите другой) или включите VPN.
           </p>
         </div>
       )}
@@ -824,10 +824,10 @@ const CustomPlayer = ({
       
       {resumePromptTime !== null && (
         <div className="resume-prompt">
-          <div className="resume-prompt-title">???�???????�?�???�?? ???�?????????�?� ?? {formatTime(resumePromptTime)}?</div>
+          <div className="resume-prompt-title">Продолжить просмотр с {formatTime(resumePromptTime)}?</div>
           <div className="resume-prompt-actions">
-             <button className="resume-btn" onClick={handleResume}>???�???????�?�???�??</button>
-             <button className="resume-btn-sec" onClick={handleIgnoreResume}>?????�?�?�?�?�</button>
+             <button className="resume-btn" onClick={handleResume}>Продолжить</button>
+             <button className="resume-btn-sec" onClick={handleIgnoreResume}>Сначала</button>
           </div>
         </div>
       )}
@@ -886,8 +886,8 @@ const CustomPlayer = ({
                <Dropdown 
                  value={activeEpisode}
                  onChange={(val) => onEpisodeChange(parseInt(val))}
-                 options={Array.from({length: kodikData.episodes_total}, (_, i) => i + 1).map(ep => ({ value: ep, label: `${ep} серия`, shortLabel: `${ep} серия.` }))}
-                 label="Настройки"
+                 options={Array.from({length: kodikData.episodes_total}, (_, i) => i + 1).map(ep => ({ value: ep, label: `${ep} серия`, shortLabel: `${ep} эп.` }))}
+                 label="Эпизод"
                />
             )}
 
@@ -896,11 +896,11 @@ const CustomPlayer = ({
                  value={currentQuality}
                  onChange={(val) => handleQualityChange({target: {value: val}})}
                  options={[{value: 'auto', label: 'Auto', shortLabel: 'Auto'}, ...qualities.map(q => ({ value: q.toString(), label: `${q}p`, shortLabel: `${q}p` }))]}
-                 label="Настройки"
+                 label="Auto"
                />
             )}
 
-            <button onClick={() => onEpisodeChange(activeEpisode + 1)} className="control-btn" title="???�?�???????�?�?? ???�?�????">
+            <button onClick={() => onEpisodeChange(activeEpisode + 1)} className="control-btn" title="Следующий эпизод">
               <SkipForward size={22} fill="currentColor" />
             </button>
 
