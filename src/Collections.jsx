@@ -1,0 +1,117 @@
+?import React, { useState } from 'react';
+import { useOutletContext, Link, useNavigate } from 'react-router-dom';
+import { FolderHeart, Plus, Lock } from 'lucide-react';
+import './Profile.css'; // Reuse profile CSS
+
+const BAD_WORDS = ['?�?�??', '?�????', '?????�??', '?�?�?�', '???�???�', 'fuck', 'shit', 'bitch', '???�????', '???????�', '?�?�?�'];
+
+const Collections = () => {
+  const { currentUser, setCurrentUser, showToast } = useOutletContext();
+  const [showCreate, setShowCreate] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState('');
+  const navigate = useNavigate();
+
+  const isProfane = (text) => {
+    const lower = text.toLowerCase();
+    return BAD_WORDS.some(word => lower.includes(word));
+  };
+
+  const handleCreate = async () => {
+    if (!currentUser) return showToast('?�?????????�?� ?? ?�?????�?????�');
+    if (newCollectionName.length < 3) return showToast('???�?�???�?????� ???�?????????? ?????�???�?????� (?????? 3 ???????????�?�)');
+    if (isProfane(newCollectionName)) return showToast('???�?�???�?????� ???????�?�?�???� ???�???????????�?????�?� ???�?????�!');
+
+    const collectionId = Date.now().toString();
+    const newCollection = {
+      id: collectionId,
+      name: newCollectionName,
+      items: []
+    };
+
+    const updatedCollections = [...(currentUser.profile?.collections || []), newCollection];
+    
+    try {
+      const res = await fetch(/api/profile/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          username: currentUser.username, 
+          profileData: { collections: updatedCollections } 
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('???????�???�???� ?????�???�???�!');
+        const updatedUser = { ...currentUser, profile: { ...currentUser.profile, collections: updatedCollections } };
+        setCurrentUser(updatedUser);
+        localStorage.setItem('neoanime_user', JSON.stringify(updatedUser));
+        setNewCollectionName('');
+        setShowCreate(false);
+        navigate(`/collection/${currentUser.username}/${collectionId}`);
+      }
+    } catch (err) {
+      showToast('???????�???� ???�?? ?????�?�?�???�??????');
+    }
+  };
+
+  if (!currentUser) {
+    return (
+      <div style={{textAlign: 'center', padding: '5rem', color: 'var(--text-secondary)'}}>
+        <Lock size={48} style={{marginBottom: '1rem', opacity: 0.5}} />
+        <h2>?�?????????�?� ?? ?�?????�?????�, ?�?�???�?� ?????�???�???�?�?? ???????�???�????</h2>
+      </div>
+    );
+  }
+
+  const collections = currentUser.profile?.collections || [];
+
+  return (
+    <div style={{padding: '2rem'}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
+        <h1 style={{color: 'white', display: 'flex', alignItems: 'center', gap: '10px'}}>
+          <FolderHeart color="var(--accent-color)" /> ?????? ???????�???�????
+        </h1>
+        <button className="btn-save" onClick={() => setShowCreate(!showCreate)}>
+          {showCreate ? '???�???�???�' : <><Plus size={18} /> ?????�???�?�?? ???????�???�????</>}
+        </button>
+      </div>
+
+      {showCreate && (
+        <div style={{background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '20px', border: '1px solid var(--border-color)'}}>
+          <h3 style={{color: 'white', marginBottom: '15px'}}>???????�?? ???????�???�???�</h3>
+          <div style={{display: 'flex', gap: '10px'}}>
+            <input 
+              type="text" 
+              placeholder="???�?�???�?????� (???�???�?????�?�: ?�???�?????� ?????�???�??)" 
+              value={newCollectionName}
+              onChange={e => setNewCollectionName(e.target.value)}
+              style={{flex: 1, padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
+            />
+            <button className="btn-save" onClick={handleCreate}>?????�?�?�?????�??</button>
+          </div>
+          <p style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '10px'}}>
+            * ?� ???�?�???�???????� ?�?�?�???�?�?�?� ?�???�?????�?�???�?�???????? ?�???�???�?� ?�?�???�???�?�.
+          </p>
+        </div>
+      )}
+
+      {collections.length === 0 ? (
+        <div style={{textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}>
+          ?? ???�?? ?�?�?� ???�?� ???????�???�????. ?????�???�???�?� ???�?�??????!
+        </div>
+      ) : (
+        <div className="favorites-grid" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))'}}>
+          {collections.map(col => (
+            <Link to={`/collection/${currentUser.username}/${col.id}`} key={col.id} className="favorite-item" style={{padding: '20px', aspectRatio: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center', minHeight: '150px'}}>
+              <FolderHeart size={48} color="var(--accent-color)" />
+              <div style={{color: 'white', fontWeight: 'bold', fontSize: '1.2rem', textAlign: 'center'}}>{col.name}</div>
+              <div style={{color: 'var(--text-secondary)', fontSize: '0.9rem'}}>{col.items?.length || 0} ?�?�???�?�????</div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Collections;
