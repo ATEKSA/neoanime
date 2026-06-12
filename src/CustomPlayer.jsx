@@ -1,4 +1,4 @@
-?import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, SkipForward } from 'lucide-react';
 import Hls from 'hls.js';
 

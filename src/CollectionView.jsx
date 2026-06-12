@@ -1,4 +1,4 @@
-?import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useOutletContext, Link, useNavigate } from 'react-router-dom';
 import { Share2, Trash2, ShieldAlert } from 'lucide-react';
 import './Profile.css';
@@ -20,7 +20,7 @@ const CollectionView = () => {
 
   useEffect(() => {
     // Fetch profile to get collection
-    fetch(/api/profile/${username}`)
+    fetch(`/api/profile/${username}`)
       .then(r => {
         if (!r.ok) throw new Error('?????�???�?????�?�?�?�?? ???� ???�?????�??');
         return r.json();
@@ -46,7 +46,7 @@ const CollectionView = () => {
     );
 
     try {
-      const res = await fetch(/api/profile/update`, {
+      const res = await fetch(`/api/profile/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -121,7 +121,7 @@ const CollectionView = () => {
     const updatedCollections = currentUser.profile.collections.filter(c => c.id !== collectionId);
     
     try {
-      const res = await fetch(/api/profile/update`, {
+      const res = await fetch(`/api/profile/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

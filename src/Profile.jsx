@@ -1,4 +1,4 @@
-?import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useOutletContext, Link } from 'react-router-dom';
 import { Edit2, Save, LogOut, Plus, Trash2, UserPlus, UserCheck, Clock } from 'lucide-react';
 import './Profile.css';
@@ -28,7 +28,7 @@ const Profile = () => {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const res = await fetch(/api/profile/${username}`);
+      const res = await fetch(`/api/profile/${username}`);
       if (res.ok) {
         const data = await res.json();
         setProfileData(data.profile);
@@ -45,7 +45,7 @@ const Profile = () => {
 
   const handleSave = async () => {
     try {
-      const res = await fetch(/api/profile/update`, {
+      const res = await fetch(`/api/profile/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: currentUser.username, profileData: editForm })
@@ -98,7 +98,7 @@ const Profile = () => {
     const updatedProfile = { ...profileData, tierList: newTierList };
     setProfileData(updatedProfile);
     try {
-      await fetch(/api/profile/update`, {
+      await fetch(`/api/profile/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: currentUser.username, profileData: { tierList: newTierList } })
@@ -189,7 +189,7 @@ const Profile = () => {
   const handleAddFriend = async () => {
     if (!currentUser) return showToast('?????�?�?�?�?� ???????????�?� ?? ?�?????�?????�');
     try {
-      const res = await fetch(/api/friends/add`, {
+      const res = await fetch(`/api/friends/add`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ sender: currentUser.username, receiver: username })
@@ -207,7 +207,7 @@ const Profile = () => {
   const handleAddFriendByCode = async () => {
     if (!friendCodeInput.trim()) return showToast('?�???�?????�?� ?????? ???�?????�');
     try {
-      const res = await fetch(/api/friends/add_by_code`, {
+      const res = await fetch(`/api/friends/add_by_code`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ sender: currentUser.username, code: friendCodeInput.trim() })
@@ -226,7 +226,7 @@ const Profile = () => {
 
   const handleAcceptFriend = async (senderName) => {
     try {
-      const res = await fetch(/api/friends/accept`, {
+      const res = await fetch(`/api/friends/accept`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ username: currentUser.username, sender: senderName })

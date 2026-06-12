@@ -1,4 +1,4 @@
-?import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useOutletContext } from 'react-router-dom';
 import { Play, Heart, Bell, MessageSquare, Star, Users, Share2, Send } from 'lucide-react';
 import Hls from 'hls.js';
@@ -8,7 +8,7 @@ const SHIKIMORI_API = 'https://shikimori.one/api';
 const SHIKIMORI_IMG = 'https://shikimori.one';
 const ANILIBRIA_API = 'https://api.anilibria.tv/v3';
 const ANILIBRIA_IMG = 'https://anilibria.top';
-const KODIK_SERVER = /api/kodik`;
+const KODIK_SERVER = `/api/kodik`;
 
 const FallbackPoster = ({ anime, className }) => {
   const [imgUrl, setImgUrl] = useState(null);
@@ -183,7 +183,7 @@ const AnimeDetails = () => {
 
   const fetchComments = async () => {
     try {
-      const res = await fetch(/api/comments/${code}`);
+      const res = await fetch(`/api/comments/${code}`);
       const data = await res.json();
       setComments(data);
     } catch (e) {
@@ -209,7 +209,7 @@ const AnimeDetails = () => {
       return false;
     }
     try {
-      const res = await fetch(/api/profile/update`, {
+      const res = await fetch(`/api/profile/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: currentUser.username, profileData: newData })
@@ -280,7 +280,7 @@ const AnimeDetails = () => {
     if (!newComment.trim()) return;
 
     try {
-      const res = await fetch(/api/comments/${code}`, {
+      const res = await fetch(`/api/comments/${code}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

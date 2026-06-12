@@ -1,4 +1,4 @@
-?import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useOutletContext, Link, useNavigate } from 'react-router-dom';
 import { FolderHeart, Plus, Lock } from 'lucide-react';
 import './Profile.css'; // Reuse profile CSS
@@ -31,7 +31,7 @@ const Collections = () => {
     const updatedCollections = [...(currentUser.profile?.collections || []), newCollection];
     
     try {
-      const res = await fetch(/api/profile/update`, {
+      const res = await fetch(`/api/profile/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

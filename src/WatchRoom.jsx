@@ -1,4 +1,4 @@
-?import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useOutletContext, useNavigate, useLocation } from 'react-router-dom';
 import { socket } from './socket';
 import { Send, LogOut, Users, Search, Crown, Mic, MicOff, Play } from 'lucide-react';
@@ -181,7 +181,7 @@ const WatchRoom = () => {
 
   const fetchKodikEpisode = async (id, episode, translation_id) => {
     try {
-      let url = /api/kodik?shikimori_id=${id}&episode=${episode}`;
+      let url = `/api/kodik?shikimori_id=${id}&episode=${episode}`;
       if (translation_id) url += `&translation_id=${translation_id}`;
       const res = await fetch(url);
       const data = await res.json();
@@ -201,7 +201,7 @@ const WatchRoom = () => {
     setIsSearching(true);
     try {
       // Use proxy to avoid CORS
-      const res = await fetch(/proxy/shikimori.one/api/animes?search=${encodeURIComponent(q)}&limit=5`);
+      const res = await fetch(`/proxy/shikimori.one/api/animes?search=${encodeURIComponent(q)}&limit=5`);
       const data = await res.json();
       setSearchResults(data);
     } catch (err) {

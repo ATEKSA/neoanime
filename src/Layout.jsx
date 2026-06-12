@@ -1,4 +1,4 @@
-?import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { PlayCircle, Library, FolderHeart, Users, Shuffle, Radio, Search, Crown, LogIn, Activity, Home, Star, Play, Menu, X, Volume2, VolumeX } from 'lucide-react';
 import './Layout.css';
@@ -143,7 +143,7 @@ const Layout = () => {
     e.preventDefault();
     setAuthError('');
     try {
-      const res = await fetch(/api/auth/${authMode}`, {
+      const res = await fetch(`/api/auth/${authMode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(authForm)
