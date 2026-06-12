@@ -248,7 +248,7 @@ const WatchRoom = () => {
         <div style={{padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', background: 'rgba(0,0,0,0.5)'}}>
           <div>
             <h2 style={{margin: 0, color: 'white'}}>{roomData.name}</h2>
-            <div style={{color: 'var(--accent-color)', fontSize: '0.9rem'}}>???????�: {roomData.host}</div>
+            <div style={{color: 'var(--accent-color)', fontSize: '0.9rem'}}>Хост: {roomData.host}</div>
           </div>
           <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
             {!isHost && (
@@ -299,7 +299,7 @@ const WatchRoom = () => {
           ) : (
             <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', flexDirection: 'column', gap: '10px'}}>
               <Play size={48} opacity={0.2} />
-              <h2>???�?????�?????� ???�?�???�?� ?�???????�...</h2>
+              <h2>Плеер загружается...</h2>
             </div>
           )}
         </div>
@@ -341,12 +341,12 @@ const WatchRoom = () => {
         <div style={{background: 'var(--bg-surface)', borderRadius: '12px', padding: '15px', border: '1px solid var(--border-color)', maxHeight: '30%', overflowY: 'auto'}}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px'}}>
             <h3 style={{color: 'white', margin: 0, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '5px'}}>
-              <Users size={16} /> ???�?�???�???????? ({roomData.members.length}/10)
+              <Users size={16} /> Участники ({roomData.members.length}/10)
             </h3>
             <button 
               onClick={toggleMic}
               style={{background: micEnabled ? 'rgba(0, 240, 255, 0.2)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: micEnabled ? 'var(--accent-color)' : 'white'}}
-              title={micEnabled ? "?�?�???�???�???�?? ???????�???�????" : "?�???�???�???�?? ?????�???????????? ?�?�?�"}
+              title={micEnabled ? "Выключить микрофон" : "Включить микрофон"}
             >
               {micEnabled ? <Mic size={16} /> : <MicOff size={16} />}
             </button>
@@ -369,7 +369,7 @@ const WatchRoom = () => {
 
         {/* Chat */}
         <div style={{flex: 1, background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
-          <div style={{padding: '15px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--border-color)', color: 'white', fontWeight: 'bold'}}>Текст</div>
+          <div style={{padding: '15px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--border-color)', color: 'white', fontWeight: 'bold'}}>Чат комнаты</div>
           
           <div style={{flex: 1, overflowY: 'auto', padding: '15px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
             {chat.map((msg, idx) => (

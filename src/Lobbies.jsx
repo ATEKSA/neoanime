@@ -78,15 +78,15 @@ const Lobbies = () => {
     <div style={{padding: '2rem'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
         <h1 style={{color: 'white', display: 'flex', alignItems: 'center', gap: '10px'}}>
-          <Users color="var(--accent-color)" />Текст</h1>
+          <Users color="var(--accent-color)" /> Совместный просмотр</h1>
         <button className="btn-save" onClick={() => setShowCreate(!showCreate)}>
-          {showCreate ? '???�???�???�' : <><Plus size={18} />Текст</>}
+          {showCreate ? '???�???�???�' : <><Plus size={18} /></>}
         </button>
       </div>
 
       {showCreate && (
         <div style={{background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '20px', border: '1px solid var(--border-color)'}}>
-          <h3 style={{color: 'white', marginBottom: '15px'}}>Текст</h3>
+          <h3 style={{color: 'white', marginBottom: '15px'}}>Создание комнаты</h3>
           <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
             <input 
               type="text" 
@@ -103,8 +103,8 @@ const Lobbies = () => {
               style={{padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
             />
             <label style={{display: 'flex', alignItems: 'center', gap: '10px', color: 'white', cursor: 'pointer'}}>
-              <input type="checkbox" checked={friendsOnly} onChange={e => setFriendsOnly(e.target.checked)} />Текст</label>
-            <button className="btn-save" onClick={handleCreate} style={{alignSelf: 'flex-start', marginTop: '10px'}}>Текст</button>
+              <input type="checkbox" checked={friendsOnly} onChange={e => setFriendsOnly(e.target.checked)} /> Только для друзей</label>
+            <button className="btn-save" onClick={handleCreate} style={{alignSelf: 'flex-start', marginTop: '10px'}}>Создать комнату</button>
           </div>
         </div>
       )}
@@ -142,8 +142,8 @@ const Lobbies = () => {
                     onChange={e => setJoinPassword(e.target.value)}
                     style={{padding: '8px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
                   />
-                  <button className="btn-save" onClick={() => handleJoin(l.id, true)}>Текст</button>
-                  <button className="btn-action" onClick={() => setJoinRoomId(null)}>Текст</button>
+                  <button className="btn-save" onClick={() => handleJoin(l.id, true)}>Войти</button>
+                  <button className="btn-action" onClick={() => setJoinRoomId(null)}>Отмена</button>
                 </div>
               ) : (
                 <button 

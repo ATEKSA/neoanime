@@ -154,17 +154,17 @@ const CollectionView = () => {
         </div>
         <div style={{display: 'flex', gap: '10px'}}>
           <button className="btn-action" onClick={handleShare} style={{padding: '10px 20px', background: 'rgba(0,240,255,0.1)', color: 'var(--accent-color)'}}>
-            <Share2 size={18} />Текст</button>
+            <Share2 size={18} /></button>
           {isOwner && (
             <button className="btn-action" onClick={handleDeleteCollection} style={{padding: '10px 20px', background: 'rgba(255,0,0,0.1)', color: 'red'}}>
-              <Trash2 size={18} />Текст</button>
+              <Trash2 size={18} /></button>
           )}
         </div>
       </div>
 
       {isOwner && (
         <div style={{background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '2rem', border: '1px solid var(--border-color)', position: 'relative'}}>
-          <h3 style={{color: 'white', marginBottom: '10px'}}>Текст</h3>
+          <h3 style={{color: 'white', marginBottom: '10px'}}></h3>
           <input 
             type="text" 
             placeholder="Введите значение..." 

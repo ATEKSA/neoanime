@@ -31,7 +31,7 @@ const FallbackPoster = ({ anime, className }) => {
   
   return (
     <div className={`css-fallback-poster ${className || ''}`} style={{ width: '100%', height: '100%' }}>
-      <span className="fallback-title" style={{ fontSize: '0.8rem', opacity: 0.5 }}>?�?�???�???�???�...</span>
+      <span className="fallback-title" style={{ fontSize: '0.8rem', opacity: 0.5 }}>Загрузка...</span>
     </div>
   );
 };
@@ -66,12 +66,12 @@ const AnimeDetails = () => {
 
   const searchAnilibriaFallback = async (animeData) => {
     if (!animeData) {
-       showToast('?? ?????�?�?�?�??????, ???????�?? ???� ???�?????�???? ?? ?�?�?�?�?�.');
+       showToast('Успешно');
        return;
     }
     try {
        const searchQuery = animeData.name || animeData.russian;
-       showToast('???�?�?? ?? ?�?�?�?�?�???????? ?�?�?�?� (Anilibria)...');
+       showToast('Успешно');
        const res = await fetch(`https://api.anilibria.tv/v3/title/search?search=${encodeURIComponent(searchQuery)}&limit=1`);
        const data = await res.json();
        if (data && data.list && data.list.length > 0) {
@@ -89,7 +89,7 @@ const AnimeDetails = () => {
                is_anilibria: true,
                anilibria_title: title
              });
-             showToast('???�?????�???? ???� Anilibria!');
+             showToast('Успешно');
              setKodikLoading(false);
              return;
           }
@@ -240,7 +240,7 @@ const AnimeDetails = () => {
     } else {
       newFavs = [...favs, { id: code, name: shikimoriAnime.russian || shikimoriAnime.name, image: `https://shikimori.one${shikimoriAnime.image.preview}` }];
     }
-    const success = await updateProfileData({ favorites: newFavs }, isFavorite ? '?????�?�?�???? ???� ???�?�?�?�??????????' : '?�???�?�???�?�???? ?? ???�?�?�?�???????�', '???????�???� ???�?? ?????�?�?�???�??????');
+    const success = await updateProfileData({ favorites: newFavs }, isFavorite ? '?????�?�?�???? ???� ???�?�?�?�Буду смотреть' : '?�???�?�???�?�???? ?? ???�?�?�?�???????�', '???????�???� ???�?? ?????�?�?�???�??????');
     if (success) setIsFavorite(!isFavorite);
   };
 
@@ -274,7 +274,7 @@ const AnimeDetails = () => {
 
   const submitComment = async () => {
     if (!currentUser) {
-      showToast('?�?????????�?�, ?�?�???�?� ?????�?�?????�?? ?????????�???�?�?�????');
+      showToast('Успешно');
       return;
     }
     if (!newComment.trim()) return;
@@ -327,7 +327,7 @@ const AnimeDetails = () => {
         </div>
         
         <button className="btn-watch-main" onClick={scrollToPlayer}>
-          <Play fill="white" size={24} />Текст</button>
+          <Play fill="white" size={24} /> Смотреть онлайн</button>
         
         <div className="action-buttons" style={{position: 'relative'}}>
           <button className={`btn-action ${isFavorite ? 'active' : ''}`} onClick={handleFavorite} title="?� ???�?�?�?�???????�">
@@ -370,31 +370,29 @@ const AnimeDetails = () => {
         
         <div className="stats-grid">
           <div className="stat-card">
-            <span className="stat-label">Текст</span>
+            <span className="stat-label">Год</span>
             <div className="stat-value"><span className="rating-badge">{shikimoriAnime.aired_on?.slice(0, 4) || '?'}</span></div>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Текст</span>
-            <span className="stat-value">{shikimoriAnime.status === 'released' ? '?�?�???�??' : '??????????????'}</span>
+            <span className="stat-label">Информация</span>
+            <span className="stat-value">{shikimoriAnime.status === 'released' ? '?�?�???�??' : 'В избранное'}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Текст</span>
+            <span className="stat-label">Эпизоды</span>
             <span className="stat-value">{shikimoriAnime.episodes_aired || shikimoriAnime.episodes || 0} / {shikimoriAnime.episodes || '?'}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Текст</span>
+            <span className="stat-label">Информация</span>
             <span className="stat-value"><Star size={16} color="gold" fill="gold" /> {userRating > 0 ? `${userRating}/10 (???�???�)` : `${shikimoriAnime.score || '?'}/10`}</span>
           </div>
         </div>
 
         <div className="description-container">
-          <p dangerouslySetInnerHTML={{__html: shikimoriAnime.description_html || shikimoriAnime.description || '?????????�?????� ???�?????�???�?????�?�.'}} />
+          <p dangerouslySetInnerHTML={{__html: shikimoriAnime.description_html || shikimoriAnime.description || 'Описание отсутствует.'}} />
         </div>
         
         <div ref={playerRef} style={{marginTop: '2rem'}}>
-          <h3 style={{fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--accent-color)'}}>
-            ???????�??-???�?�?�?�
-          </h3>
+          <h3 style={{fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--accent-color)'}}>Смотреть онлайн</h3>
           
           <div className="player-container" style={{padding: 0, border: 'none', background: '#000', borderRadius: '12px', overflow: 'hidden'}}>
             {kodikLoading && !kodikUrl ? (
@@ -413,7 +411,7 @@ const AnimeDetails = () => {
                 onEpisodeChange={(epId) => fetchKodikEpisode(code, epId, activeKodikTranslation || kodikData?.active_translation)}
               />
             ) : (
-              <div style={{padding: '5rem', textAlign: 'center'}}>Текст</div>
+              <div style={{padding: '5rem', textAlign: 'center'}}>Плеер загружается...</div>
             )}
           </div>
         </div>
@@ -421,13 +419,13 @@ const AnimeDetails = () => {
         {/* COMMENTS SECTION */}
         <div ref={commentsRef} className="comments-section" style={{marginTop: '3rem'}}>
           <h3 style={{fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--accent-color)', display: 'flex', alignItems: 'center', gap: '10px'}}>
-            <MessageSquare size={24} /> ???�?????�?�?�?????� ({comments.length})
+            <MessageSquare size={24} /> Комментарии ({comments.length})
           </h3>
           
           <div className="comments-list" style={{display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '20px'}}>
             {comments.length === 0 ? (
               <div style={{color: 'var(--text-secondary)', fontStyle: 'italic', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px'}}>
-                ?�???????�?� ???�?�???�????, ???�?? ?????�?�?????� ?????????�???�?�?�????!
+                Здесь пока нет комментариев. Напишите первым!
               </div>
             ) : (
               comments.map(c => (
@@ -453,7 +451,7 @@ const AnimeDetails = () => {
             )}
             <div style={{flex: 1, display: 'flex', flexDirection: 'column', gap: '10px'}}>
               <textarea 
-                placeholder={currentUser ? "???�???????�?�?? ?????????�???�?�?�????..." : "?�?????????�?�, ?�?�???�?� ???????�?�?? ?????????�???�?�?�????"}
+                placeholder={currentUser ? "Написать комментарий..." : "Войдите, чтобы писать комментарии"}
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
                 disabled={!currentUser}
@@ -464,7 +462,7 @@ const AnimeDetails = () => {
                 disabled={!currentUser || !newComment.trim()}
                 style={{alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'var(--accent-gradient)', color: 'black', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: (!currentUser || !newComment.trim()) ? 'not-allowed' : 'pointer', opacity: (!currentUser || !newComment.trim()) ? 0.5 : 1}}
               >
-                <Send size={16} />Текст</button>
+                <Send size={16} /> Смотреть онлайн</button>
             </div>
           </div>
         </div>

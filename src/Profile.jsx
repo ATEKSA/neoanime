@@ -244,7 +244,7 @@ const Profile = () => {
   };
 
   if (loading) return <div className="profile-container">?�?�???�???�???� ???�???�???�??...</div>;
-  if (!profileData) return <div className="profile-container">Текст</div>;
+  if (!profileData) return <div className="profile-container"></div>;
 
   const tl = getTierList();
   const favorites = profileData.favorites || [];
@@ -276,7 +276,7 @@ const Profile = () => {
                 onChange={e => setEditForm({...editForm, description: e.target.value})} 
                 placeholder="Введите значение..."
               />
-              <button onClick={handleSave} className="btn-save"><Save size={18} />Текст</button>
+              <button onClick={handleSave} className="btn-save"><Save size={18} /></button>
             </div>
           ) : (
             <div className="profile-desc">
@@ -292,17 +292,17 @@ const Profile = () => {
         
         {isOwner && !isEditing ? (
           <div className="profile-actions">
-            <button onClick={() => setIsEditing(true)} className="btn-edit"><Edit2 size={18} />Текст</button>
-            <button onClick={handleLogout} className="btn-logout"><LogOut size={18} />Текст</button>
+            <button onClick={() => setIsEditing(true)} className="btn-edit"><Edit2 size={18} /></button>
+            <button onClick={handleLogout} className="btn-logout"><LogOut size={18} /></button>
           </div>
         ) : !isOwner && currentUser ? (
           <div className="profile-actions">
             {profileData.friends?.includes(currentUser.username) ? (
-              <button className="btn-save" disabled style={{opacity: 0.5}}><UserCheck size={18} />Текст</button>
+              <button className="btn-save" disabled style={{opacity: 0.5}}><UserCheck size={18} /></button>
             ) : profileData.friendRequests?.includes(currentUser.username) ? (
-              <button className="btn-edit" disabled style={{opacity: 0.5}}><Clock size={18} />Текст</button>
+              <button className="btn-edit" disabled style={{opacity: 0.5}}><Clock size={18} /></button>
             ) : (
-              <button className="btn-save" onClick={handleAddFriend}><UserPlus size={18} />Текст</button>
+              <button className="btn-save" onClick={handleAddFriend}><UserPlus size={18} /></button>
             )}
           </div>
         ) : null}
@@ -310,9 +310,9 @@ const Profile = () => {
 
       <div className="profile-tabs">
         <button className={`tab-btn ${activeTab === 'tierlist' ? 'active' : ''}`} onClick={() => setActiveTab('tierlist')}>?????�-?�?????�</button>
-        <button className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>Текст</button>
+        <button className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}></button>
         <button className={`tab-btn ${activeTab === 'friends' ? 'active' : ''}`} onClick={() => setActiveTab('friends')}>?�?�???�???? {(isOwner && profileData.friendRequests?.length > 0) ? `(+${profileData.friendRequests.length})` : ''}</button>
-        {isOwner && <button className={`tab-btn ${activeTab === 'add_friend' ? 'active' : ''}`} onClick={() => setActiveTab('add_friend')}>Текст</button>}
+        {isOwner && <button className={`tab-btn ${activeTab === 'add_friend' ? 'active' : ''}`} onClick={() => setActiveTab('add_friend')}></button>}
       </div>
 
       {activeTab === 'tierlist' && (
@@ -321,7 +321,7 @@ const Profile = () => {
             <h2>?????�-?�?????� ?�???????� {isOwner && '(???�?�?�?�?�?????????�???�?� ?�???????� ???�?�???? ?�???�?�????)'}</h2>
             {isOwner && (
               <button className="btn-add-tier" onClick={() => setShowAddForm(!showAddForm)}>
-                {showAddForm ? '???�???�???�' : <><Plus size={18}/>Текст</>}
+                {showAddForm ? '???�???�???�' : <><Plus size={18}/></>}
               </button>
             )}
           </div>
@@ -382,7 +382,7 @@ const Profile = () => {
                       )}
                     </div>
                   )) : (
-                    <span style={{color: 'rgba(255,255,255,0.2)'}}>Текст</span>
+                    <span style={{color: 'rgba(255,255,255,0.2)'}}></span>
                   )}
                 </div>
               </div>
@@ -393,7 +393,7 @@ const Profile = () => {
 
       {activeTab === 'favorites' && (
         <div className="profile-favorites">
-          <h2>Текст</h2>
+          <h2></h2>
           {favorites.length === 0 ? (
             <p style={{color: 'var(--text-secondary)'}}>???????????? ???�?�?�?�?????????? ???????� ???????�.</p>
           ) : (
@@ -413,19 +413,19 @@ const Profile = () => {
         <div style={{marginTop: '2rem'}}>
           {isOwner && profileData.friendRequests?.length > 0 && (
             <div style={{marginBottom: '2rem'}}>
-              <h3>Текст</h3>
+              <h3></h3>
               <div style={{display: 'flex', flexWrap: 'wrap', gap: '15px', marginTop: '10px'}}>
                 {profileData.friendRequests.map(req => (
                   <div key={req} style={{display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '12px', border: '1px solid var(--accent-color)'}}>
                     <Link to={`/profile/${req}`} style={{color: 'white', textDecoration: 'none', fontWeight: 'bold'}}>{req}</Link>
-                    <button onClick={() => handleAcceptFriend(req)} className="btn-save" style={{padding: '5px 15px', fontSize: '0.9rem'}}>Текст</button>
+                    <button onClick={() => handleAcceptFriend(req)} className="btn-save" style={{padding: '5px 15px', fontSize: '0.9rem'}}></button>
                   </div>
                 ))}
               </div>
             </div>
           )}
           
-          <h3>Текст</h3>
+          <h3></h3>
           {(!profileData.friends || profileData.friends.length === 0) ? (
             <div style={{padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '10px'}}>
               ???????� ???�?� ???�???�?�??.
@@ -445,7 +445,7 @@ const Profile = () => {
 
       {activeTab === 'add_friend' && isOwner && (
         <div style={{marginTop: '2rem', background: 'rgba(0,0,0,0.3)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center'}}>
-          <h2 style={{marginBottom: '1rem'}}>Текст</h2>
+          <h2 style={{marginBottom: '1rem'}}></h2>
           <p style={{color: 'var(--text-secondary)', marginBottom: '1.5rem'}}>
             ?�???�?????�?� 6-?�???�?�???�?? ?????? ???�?????�, ?�?�???�?� ???�???�?�?????�?? ?�???? ?�?�????????.
           </p>

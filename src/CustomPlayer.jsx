@@ -878,7 +878,7 @@ const CustomPlayer = ({
                  value={activeTranslation || kodikData.active_translation || ''}
                  onChange={(val) => onTranslationChange(val)}
                  options={kodikData.translations.map(t => ({ value: t.id, label: t.name, shortLabel: t.name }))}
-                 label="???�?????�???�"
+                 label="Настройки"
                />
             )}
 
@@ -886,8 +886,8 @@ const CustomPlayer = ({
                <Dropdown 
                  value={activeEpisode}
                  onChange={(val) => onEpisodeChange(parseInt(val))}
-                 options={Array.from({length: kodikData.episodes_total}, (_, i) => i + 1).map(ep => ({ value: ep, label: `${ep} ???�?�????`, shortLabel: `${ep} ????.` }))}
-                 label="???�?�????"
+                 options={Array.from({length: kodikData.episodes_total}, (_, i) => i + 1).map(ep => ({ value: ep, label: `${ep} серия`, shortLabel: `${ep} серия.` }))}
+                 label="Настройки"
                />
             )}
 
@@ -896,7 +896,7 @@ const CustomPlayer = ({
                  value={currentQuality}
                  onChange={(val) => handleQualityChange({target: {value: val}})}
                  options={[{value: 'auto', label: 'Auto', shortLabel: 'Auto'}, ...qualities.map(q => ({ value: q.toString(), label: `${q}p`, shortLabel: `${q}p` }))]}
-                 label="Auto"
+                 label="Настройки"
                />
             )}
 
