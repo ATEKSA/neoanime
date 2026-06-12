@@ -174,7 +174,7 @@ const CollectionView = () => {
             onChange={handleSearchAnime} 
             style={{width: '100%', padding: '12px 15px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white'}}
           />
-          {isSearching && <div style={{color: 'var(--text-secondary)', marginTop: '5px'}}>??????????...</div>}
+          {isSearching && <div style={{color: 'var(--text-secondary)', marginTop: '5px'}}>Поиск...</div>}
           
           {searchResults.length > 0 && (
             <div className="tierlist-search-results" style={{position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--bg-surface)', zIndex: 10, border: '1px solid var(--border-color)', borderRadius: '8px', padding: '10px'}}>
